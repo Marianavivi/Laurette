@@ -1,0 +1,16 @@
+{
+  "name": "laurette",
+  "version": "1.0.0",
+  "description": "Your friendly WhatsApp bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "@adiwajshing/baileys": "^4.4.0",
+    "qrcode-terminal": "^0.12.0",
+    "node-fetch": "^2.6.7"
+  }
+}

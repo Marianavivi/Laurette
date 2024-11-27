@@ -34,6 +34,13 @@ const handleMessage = async (sock, msg) => {
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     await sock.sendMessage(from, { text: `The current time is ${timeString}` });
   }
+
+  // Respond to "cat" by sending a cat image
+  if (message.toLowerCase() === 'cat') {
+    await sock.sendMessage(from, {
+      image: { url: 'https://cataas.com/cat' } 
+    });
+  }
 };
 
 module.exports = { handleMessage };

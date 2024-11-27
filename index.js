@@ -1,9 +1,9 @@
 const { default: makeWASocket, useSingleFileAuthState, DisconnectReason } = require('@adiwajshing/baileys');
 const { state, saveState } = useSingleFileAuthState('./auth_info_multi.json');
 const qrcode = require('qrcode-terminal');
-const { handleMessage } = require('./messageHandlers'); // Import message handlers
-const config = require('./config'); // Import configuration settings
-const { handleSticker } = require('./plugins/sticker'); // Import the sticker handler
+const { handleMessage } = require('./messageHandlers');
+const config = require('./config');
+const { handleSticker } = require('./plugins/sticker');
 
 // Function to create a WhatsApp bot
 const connectToWhatsApp = async () => {
@@ -33,9 +33,8 @@ const connectToWhatsApp = async () => {
     if (type === 'notify') {
       for (const msg of messages) {
         if (msg.key && msg.key.remoteJid !== 'status@broadcast') {
-          // Handle incoming messages here
           await handleMessage(sock, msg);
-          await handleSticker(sock, msg); // Call the sticker handler
+          await handleSticker(sock, msg);
         }
       }
     }

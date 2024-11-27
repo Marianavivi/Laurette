@@ -43,9 +43,32 @@ const handleMessage = async (sock, msg) => {
     const from = msg.key.remoteJid;
     const message = msg.message.conversation;
 
-    // Example: Respond to a "hello" message
+    // Respond with a custom display name and greeting variations
     if (message.toLowerCase() === 'hello') {
-        await sock.sendMessage(from, { text: 'Hello there!' });
+        const greetings = [
+            "Hello there! It's Laurette here. How can I help you today?",
+            "Hi! Laurette at your service. What can I do for you?",
+            "Hey! It's Laurette. What's up?"
+        ];
+        const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+        await sock.sendMessage(from, { text: randomGreeting });
+    }
+
+    // Respond to "who are you?"
+    if (message.toLowerCase().includes('who are you')) {
+        await sock.sendMessage(from, { text: "I'm Laurette, your friendly WhatsApp bot. I'm here to help you with whatever you need." });
+    }
+
+    // Respond to "what can you do?"
+    if (message.toLowerCase().includes('what can you do')) {
+        await sock.sendMessage(from, { text: "I'm still learning, but I can do things like greet you, answer simple questions, and maybe even tell you a joke if you ask nicely." });
+    }
+
+    // Respond to "time"
+    if (message.toLowerCase() === 'time') {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        await sock.sendMessage(from, { text: `The current time is ${timeString}` });
     }
 };
 

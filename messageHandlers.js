@@ -49,6 +49,35 @@ const handleMessage = async (sock, msg) => {
     await sock.sendMessage(from, { text: "I'm still learning, but I can do things like greet you, answer simple questions, and provide information." });
   }
 
+  // Respond to "menu"
+  if (message.toLowerCase() === 'menu') {
+    const menu = `
+    ✨✨ *Laurette's Menu* ✨✨
+
+    👋 *Greetings*
+    - hello: Say hello to Laurette!
+    - who are you: Learn about Laurette.
+    - what can you do: Discover Laurette's skills.
+
+    ❓ *General*
+    - time: Get the current time.
+    - fun fact: Learn a random fun fact.
+    - news: Get the latest news headlines.
+    - joke: Get a funny joke.
+
+    🖼️ *Images*
+    - cat: Get a random cat image.
+    - image [search query]: Search for images on the web.
+    - generate [prompt]: Generate an image using AI.
+
+    ⚙️ *Settings*
+    - setprefix [new prefix]: Change the command prefix.
+
+    Type a command to get started! 😊
+    `;
+    await sock.sendMessage(from, { text: menu });
+  }
+
   // Respond to "time"
   if (message.toLowerCase() === 'time') {
     const now = new Date();
@@ -147,6 +176,24 @@ const handleMessage = async (sock, msg) => {
         break;
       default:
         await sock.sendMessage(from, { text: 'Unknown command. Type /help to see available commands.' });
+    }
+  }
+
+  // Handle mentions in groups
+  if (msg.message && msg.message.extendedTextMessage && msg.message.extendedTextMessage.contextInfo && msg.message.extendedTextMessage.contextInfo.mentionedJid) {
+    const mentionedJid = msg.message.extendedTextMessage.contextInfo.mentionedJid;
+    if (mentionedJid.includes(sock.user.id)) { // Check if the bot was mentioned
+      const messageText = msg.message.extendedTextMessage.text;
+
+      // Respond to mentions
+      if (messageText.toLowerCase().includes('hello')) {
+        await sock.sendMessage(msg.key.remoteJid, { text: `Hello! I'm ${config.botName}. How can I help you?` });
+      } else if (messageText.toLowerCase().includes('time')) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        await sock.sendMessage(msg.key.remoteJid, { text: `The current time is ${timeString}` });
+      } 
+      // ... handle other mentions ...
     }
   }
 };

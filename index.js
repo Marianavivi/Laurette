@@ -4,6 +4,7 @@ const qrcode = require('qrcode-terminal');
 const { handleMessage } = require('./messageHandlers');
 const config = require('./config');
 const { handleSticker } = require('./plugins/sticker');
+const { handleImageSearch } = require('./plugins/imageSearch'); // Import the image search handler
 
 // Function to create a WhatsApp bot
 const connectToWhatsApp = async () => {
@@ -35,6 +36,7 @@ const connectToWhatsApp = async () => {
         if (msg.key && msg.key.remoteJid !== 'status@broadcast') {
           await handleMessage(sock, msg);
           await handleSticker(sock, msg);
+          await handleImageSearch(sock, msg); // Call the image search handler
         }
       }
     }

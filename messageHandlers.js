@@ -1,11 +1,13 @@
-const { default: makeWASocket, useSingleFileAuthState, DisconnectReason } = require('@adiwajshing/baileys');
-const qrcode = require('qrcode-terminal');
-const config = require('./config'); // Import configuration settings
+const fetch = require('node-fetch');
+const config = require('./config');
+const { log } = require('./lib/logger'); // Import the logger
 
 // Function to handle incoming messages
 const handleMessage = async (sock, msg) => {
   const from = msg.key.remoteJid;
   const message = msg.message.conversation;
+
+  log(`Received message from ${from}: ${message}`); // Log the message
 
   // Respond with a custom display name and greeting variations
   if (message.toLowerCase() === 'hello') {
@@ -40,6 +42,18 @@ const handleMessage = async (sock, msg) => {
     await sock.sendMessage(from, {
       image: { url: 'https://cataas.com/cat' } 
     });
+  }
+
+  // Respond to "fun fact"
+  if (message.toLowerCase() === 'fun fact') {
+    try {
+      const response = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
+      const data = await response.json();
+      await sock.sendMessage(from, { text: data.text });
+    } catch (error) {
+      console.error('Error fetching fun fact:', error);
+      await sock.sendMessage(from, { text: 'Oops, I couldn\'t find a fun fact right now. Try again later!' });
+    }
   }
 };
 
